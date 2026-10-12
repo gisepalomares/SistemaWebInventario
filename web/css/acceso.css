@@ -1,0 +1,288 @@
+/* =====================================================================
+   JD&A Electro Speed - Estilos de acceso (login / registro) y de la
+   plantilla de la zona interna (panel, módulos, pie interno).
+   Se carga DESPUÉS de estilos.css, que define los colores base.
+   ===================================================================== */
+
+/* ---------- Login y registro ---------- */
+.acceso {
+    display: flex;
+    align-items: center;
+    padding: 3rem 0;
+}
+
+.acceso-caja {
+    max-width: 420px;
+    margin: 0 auto;
+    padding: 2rem 2rem 1.5rem;
+    background-color: var(--es-blanco);
+    border: 1px solid var(--es-borde);
+}
+
+.acceso-caja-ancha {
+    max-width: 560px;
+}
+
+.acceso-titulo {
+    margin-bottom: .5rem;
+    color: var(--es-oscuro);
+    font-size: 1.6rem;
+    font-weight: 700;
+}
+
+.acceso-texto {
+    margin-bottom: 1.5rem;
+    color: var(--es-texto-suave);
+    font-size: .92rem;
+}
+
+.acceso-pie {
+    margin: 1.5rem 0 0;
+    padding-top: 1rem;
+    border-top: 1px solid var(--es-fondo-alt);
+    color: var(--es-texto-suave);
+    font-size: .88rem;
+    text-align: center;
+}
+
+.acceso-pie a {
+    color: var(--es-oscuro);
+    font-weight: 600;
+}
+
+.form-label {
+    font-size: .85rem;
+    font-weight: 600;
+}
+
+/* ---------- Plantilla interna: barra superior + menú lateral ---------- */
+.topbar {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    padding: .7rem 1.25rem;
+    background-color: var(--es-oscuro);
+    border-bottom: 1px solid #000;
+    color: #fff;
+}
+
+.topbar-toggle {
+    padding: .1rem .5rem;
+    border: 1px solid rgba(255, 255, 255, .4);
+    color: #fff;
+    font-size: 1.4rem;
+    line-height: 1.2;
+}
+
+.topbar-marca {
+    display: flex;
+    align-items: center;
+    gap: .55rem;
+    color: #fff;
+    font-weight: 700;
+    letter-spacing: .02em;
+    text-decoration: none;
+}
+
+.topbar-marca:hover {
+    color: #fff;
+}
+
+.topbar-sep {
+    color: rgba(255, 255, 255, .4);
+    font-weight: 400;
+}
+
+.topbar-modulo {
+    color: rgba(255, 255, 255, .75);
+    font-weight: 500;
+}
+
+.topbar-usuario {
+    display: flex;
+    align-items: center;
+    gap: .45rem;
+    color: #fff;
+    font-size: .9rem;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.topbar-usuario:hover {
+    color: #fff;
+}
+
+.topbar .dropdown-menu {
+    border-radius: var(--es-radio);
+}
+
+/* Contenedor general: menú a la izquierda, contenido a la derecha */
+.app-interno {
+    display: flex;
+    flex: 1 0 auto;
+}
+
+.menu-col {
+    flex: 0 0 auto;
+}
+
+.app-contenido {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-width: 0;            /* evita que las tablas anchas rompan el diseño */
+}
+
+.app-contenido > main {
+    flex: 1 0 auto;
+}
+
+/* Menú lateral */
+@media (min-width: 992px) {
+    .menu-col {
+        width: 230px;
+        background-color: #eeeeee;
+        border-right: 1px solid var(--es-borde);
+    }
+}
+
+.menu-lateral {
+    display: flex;
+    flex-direction: column;
+    padding: .75rem 0;
+}
+
+.menu-link {
+    display: flex;
+    align-items: center;
+    gap: .7rem;
+    padding: .7rem 1.4rem;
+    color: var(--es-texto);
+    font-size: .92rem;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.menu-link i {
+    width: 1.1rem;
+    color: var(--es-texto-suave);
+    font-size: 1.05rem;
+    text-align: center;
+}
+
+.menu-link:hover {
+    background-color: #e0e0e0;
+    color: var(--es-oscuro);
+}
+
+.menu-link.active {
+    background-color: #d6d6d6;
+    box-shadow: inset 3px 0 0 var(--es-oscuro);
+    color: var(--es-oscuro);
+    font-weight: 700;
+}
+
+.menu-link.active i {
+    color: var(--es-oscuro);
+}
+
+/* Encabezado de cada pantalla dentro del área central */
+.app-contenido .encabezado-pagina {
+    background-color: transparent;
+    border-bottom: 0;
+    padding: 1.75rem 0 0;
+    margin-bottom: 1.25rem;
+}
+
+/* Barra de búsqueda y filtros encima de las tablas */
+.barra-filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .75rem;
+    margin-bottom: 1rem;
+}
+
+.barra-filtros .form-control {
+    flex: 1 1 280px;
+}
+
+.barra-filtros .form-select {
+    flex: 0 0 200px;
+}
+
+/* Tablas de datos */
+.tabla-es thead th {
+    background-color: var(--es-fondo-alt);
+    color: var(--es-oscuro);
+    font-size: .8rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+/* Tarjetas del menú de módulos */
+.modulo {
+    position: relative;
+    display: block;
+    height: 100%;
+    padding: 1.4rem 1.4rem 1.2rem;
+    background-color: var(--es-blanco);
+    border: 1px solid var(--es-borde);
+    color: inherit;
+    text-decoration: none;
+    transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+a.modulo:hover {
+    border-color: #777;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, .08);
+    color: inherit;
+}
+
+.modulo > i {
+    display: block;
+    margin-bottom: .6rem;
+    color: var(--es-oscuro-suave);
+    font-size: 1.8rem;
+}
+
+.modulo h2 {
+    margin-bottom: .3rem;
+    color: var(--es-oscuro);
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+
+.modulo p {
+    margin-bottom: .9rem;
+    color: var(--es-texto-suave);
+    font-size: .88rem;
+}
+
+.modulo-estado {
+    display: inline-block;
+    padding: .2rem .55rem;
+    background-color: var(--es-fondo-alt);
+    border: 1px solid var(--es-borde);
+    color: var(--es-texto-suave);
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.modulo-estado.modulo-listo {
+    background-color: #e7f4ea;
+    border-color: #a9d3b2;
+    color: #1e6b32;
+}
+
+/* Pie de la zona interna */
+.pie-interno {
+    margin-top: auto;
+    padding: 1rem 1.5rem;
+    background-color: var(--es-fondo-alt);
+    border-top: 1px solid var(--es-borde);
+    color: var(--es-texto-suave);
+    font-size: .78rem;
+    text-align: center;
+}

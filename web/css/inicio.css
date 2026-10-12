@@ -1,0 +1,270 @@
+/* =====================================================================
+   Estilos exclusivos de la página de inicio
+   (usa las variables definidas en estilos.css)
+   ===================================================================== */
+
+/* ---------- Portada ---------- */
+.inicio-hero {
+    padding: 4.5rem 0;
+    background-color: var(--es-fondo-alt);
+    border-bottom: 1px solid var(--es-borde);
+}
+
+.inicio-titulo {
+    max-width: 640px;
+    margin-bottom: 1.25rem;
+    color: var(--es-oscuro);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    line-height: 1.15;
+}
+
+.inicio-titulo span {
+    display: block;
+    color: var(--es-texto-suave);
+}
+
+.inicio-descripcion {
+    max-width: 540px;
+    margin-bottom: 1.75rem;
+    color: #555;
+    font-size: 1.05rem;
+    line-height: 1.75;
+}
+
+.inicio-botones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .75rem;
+}
+
+.inicio-nota {
+    display: flex;
+    align-items: center;
+    gap: .45rem;
+    margin: 1.1rem 0 0;
+    color: var(--es-texto-suave);
+    font-size: .82rem;
+}
+
+/* Panel derecho de la portada */
+.hero-panel {
+    padding: 2rem;
+    background-color: var(--es-blanco);
+    border: 1px solid var(--es-borde);
+}
+
+.hero-panel h2 {
+    margin-bottom: 1rem;
+    color: var(--es-oscuro);
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+.visual-linea {
+    width: 56px;
+    height: 3px;
+    margin-bottom: 1.5rem;
+    background-color: var(--es-oscuro-suave);
+}
+
+.hero-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 1.15rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.hero-lista li {
+    display: flex;
+    align-items: flex-start;
+    gap: .9rem;
+}
+
+.hero-lista i {
+    display: flex;
+    flex-shrink: 0;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    background-color: var(--es-fondo-alt);
+    border: 1px solid var(--es-borde);
+    color: var(--es-oscuro-suave);
+    font-size: 1.15rem;
+}
+
+.hero-lista strong {
+    display: block;
+    color: var(--es-oscuro);
+    font-size: .92rem;
+}
+
+.hero-lista span {
+    color: var(--es-texto-suave);
+    font-size: .82rem;
+    line-height: 1.5;
+}
+
+/* ---------- Categorías ---------- */
+.seccion-categorias {
+    padding-top: 3.5rem;
+    padding-bottom: 3.5rem;
+}
+
+.encabezado-seccion {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 1.25rem;
+    margin-bottom: 1.75rem;
+}
+
+.encabezado-seccion h2 {
+    margin-bottom: .4rem;
+    color: var(--es-oscuro);
+    font-size: 1.65rem;
+    font-weight: 700;
+}
+
+.encabezado-seccion p:last-child {
+    margin-bottom: 0;
+    color: var(--es-texto-suave);
+    font-size: .92rem;
+}
+
+.enlace-catalogo {
+    flex-shrink: 0;
+    color: var(--es-oscuro-suave);
+    font-size: .85rem;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.enlace-catalogo:hover {
+    color: var(--es-oscuro);
+    text-decoration: underline;
+}
+
+.categoria-card {
+    display: block;
+    height: 100%;
+    padding: 1.4rem 1.25rem;
+    background-color: var(--es-blanco);
+    border: 1px solid var(--es-borde);
+    color: var(--es-texto);
+    text-decoration: none;
+    transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.categoria-card:hover {
+    border-color: #777;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, .08);
+    color: var(--es-texto);
+}
+
+.categoria-icono {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 1.1rem;
+    background-color: var(--es-fondo-alt);
+    border: 1px solid var(--es-borde);
+    color: var(--es-oscuro-suave);
+    font-size: 1.4rem;
+}
+
+.categoria-card h3 {
+    margin-bottom: .4rem;
+    color: var(--es-oscuro);
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+
+.categoria-card p {
+    min-height: 2.6rem;
+    margin-bottom: 1rem;
+    color: var(--es-texto-suave);
+    font-size: .85rem;
+    line-height: 1.5;
+}
+
+.categoria-card .ver {
+    color: var(--es-oscuro-suave);
+    font-size: .82rem;
+    font-weight: 600;
+}
+
+/* ---------- Proceso de compra ---------- */
+.seccion-proceso {
+    padding: 3.5rem 0;
+    background-color: var(--es-blanco);
+    border-top: 1px solid var(--es-borde);
+    border-bottom: 1px solid var(--es-borde);
+}
+
+.seccion-proceso .encabezado-seccion {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+}
+
+.paso {
+    height: 100%;
+    padding: 1.25rem 1.25rem 1.25rem 0;
+}
+
+.paso-numero {
+    display: inline-block;
+    margin-bottom: .75rem;
+    padding-bottom: .5rem;
+    border-bottom: 3px solid var(--es-oscuro-suave);
+    color: var(--es-oscuro);
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.paso h3 {
+    margin-bottom: .5rem;
+    color: var(--es-oscuro);
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.paso p {
+    margin-bottom: 0;
+    color: var(--es-texto-suave);
+    font-size: .88rem;
+    line-height: 1.6;
+}
+
+/* ---------- Celulares y tablets ---------- */
+@media (max-width: 991px) {
+    .inicio-hero {
+        padding: 3rem 0;
+    }
+}
+
+@media (max-width: 575px) {
+    .inicio-hero {
+        padding: 2.25rem 0;
+    }
+
+    .inicio-botones .btn {
+        width: 100%;
+    }
+
+    .hero-panel {
+        padding: 1.4rem;
+    }
+
+    .encabezado-seccion {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: .75rem;
+    }
+}
