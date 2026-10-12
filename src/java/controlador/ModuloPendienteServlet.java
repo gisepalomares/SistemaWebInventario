@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletResponse;
  * Usen como modelo la pantalla de usuarios.jsp / UsuarioServlet.
  */
 @WebServlet(name = "ModuloPendienteServlet", urlPatterns = {
-    "/interno/compras",
     "/interno/reportes"
 })
 public class ModuloPendienteServlet extends HttpServlet {
