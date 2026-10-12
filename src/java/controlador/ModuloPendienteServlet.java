@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "ModuloPendienteServlet", urlPatterns = {
     "/interno/ventas",
-    "/interno/proveedores",
     "/interno/compras",
     "/interno/reportes"
 })
