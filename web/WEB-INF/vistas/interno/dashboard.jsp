@@ -78,7 +78,7 @@
                                 <i class="bi bi-cart-plus"></i>
                                 <h2>Compras</h2>
                                 <p>Entradas de mercadería al almacén.</p>
-                                <span class="modulo-estado">En desarrollo</span>
+                                <span class="modulo-estado modulo-listo">Disponible</span>
                             </a>
                         </div>
                         <div class="col-12 col-sm-6 col-xl-4">
