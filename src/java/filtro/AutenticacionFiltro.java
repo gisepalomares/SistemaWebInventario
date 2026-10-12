@@ -33,8 +33,9 @@ public class AutenticacionFiltro implements Filter {
 
     /** Rutas (prefijos) que solo puede abrir el ADMINISTRADOR. */
     private static final List<String> RUTAS_SOLO_ADMIN = Arrays.asList(
-            "/interno/usuarios",
-            "/interno/categorias",
+            
+                    
+           
             "/interno/reportes",
             "/interno/proveedores",
             "/interno/compras"

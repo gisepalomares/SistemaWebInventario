@@ -168,7 +168,6 @@ public class ProductoDAO implements IProductoDAO {
                     Producto p = mapear(rs);
 
                     if (conProveedor) {
-                        p.setIdProveedor(rs.getInt("id_proveedor"));
                         p.setProveedor(rs.getString("proveedor"));
                     }
 

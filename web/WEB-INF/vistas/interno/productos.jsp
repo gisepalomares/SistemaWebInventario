@@ -256,7 +256,7 @@
                                     <select class="form-select" id="cProveedor" name="proveedor">
                                         <option value="">Sin proveedor</option>
                                         <c:forEach var="pr" items="${proveedores}">
-                                            <option value="${pr.idProveedor}"><c:out value="${pr.nombreMostrar}"/></option>
+                                            <option value="${pr.idProveedor}"><c:out value="${empty pr.nombreComercial ? pr.razonSocial : pr.nombreComercial}"/></option>
                                         </c:forEach>
                                     </select>
                                 </div>
@@ -330,7 +330,7 @@
                                     <select class="form-select" id="eProveedor" name="proveedor">
                                         <option value="">Sin proveedor</option>
                                         <c:forEach var="pr" items="${proveedores}">
-                                            <option value="${pr.idProveedor}"><c:out value="${pr.nombreMostrar}"/></option>
+                                            <option value="${pr.idProveedor}"><c:out value="${empty pr.nombreComercial ? pr.razonSocial : pr.nombreComercial}"/></option>
                                         </c:forEach>
                                     </select>
                                 </div>
@@ -478,10 +478,12 @@
             order: [],
 
             columnDefs: [
+                <c:if test="${esAdmin}">
                 {
                     orderable: false,
                     targets: -1
                 }
+                </c:if>
             ]
         });
 
