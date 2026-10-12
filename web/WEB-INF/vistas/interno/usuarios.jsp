@@ -21,7 +21,7 @@
                 <div class="container-fluid px-4 d-flex flex-wrap justify-content-between align-items-center gap-3">
                     <div>
                         <h1>Usuarios del personal</h1>
-                        <p>Solo el administrador crea las cuentas del personal y les asigna su rol.</p>
+                        
                     </div>
                     <button type="button" class="btn btn-es" data-bs-toggle="modal" data-bs-target="#modalCrear">
                         <i class="bi bi-person-plus"></i>Nuevo usuario
@@ -118,10 +118,7 @@
                     </div>
                 </div>
 
-                <p class="text-secondary small mt-3 mb-0">
-                    <i class="bi bi-info-circle me-1"></i>
-                    Las cuentas de clientes se crean solas desde la tienda en línea y no aparecen aquí.
-                </p>
+                
             </div>
         </main>
 

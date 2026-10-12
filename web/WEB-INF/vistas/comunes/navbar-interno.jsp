@@ -31,7 +31,7 @@
         <i class="bi bi-gear-fill"></i>
         <span>JD&amp;A Electro Speed</span>
         <span class="topbar-sep d-none d-sm-inline">|</span>
-        <span class="topbar-modulo d-none d-sm-inline">Módulo de Inventario</span>
+        <span class="topbar-modulo d-none d-sm-inline">Módulo de Interno</span>
     </a>
 
     <div class="dropdown ms-auto">

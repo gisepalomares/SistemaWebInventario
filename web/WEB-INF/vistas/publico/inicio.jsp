@@ -27,13 +27,14 @@
                             <p class="etiqueta">Repuestos vehiculares</p>
 
                             <h1 class="inicio-titulo">
-                                Repuestos para su vehículo,
-                                <span>con disponibilidad actualizada.</span>
+                                ¡Tu vehículo en buenas manos,
+                                <span>tus repuestos al alcance!</span>
                             </h1>
 
                             <p class="inicio-descripcion">
-                                Consulte el catálogo, registre su pedido en línea y retírelo
-                                en nuestra tienda de Comas con su código de recojo.
+                                Encuentra lo que necesitas, realiza tu pedido 
+                                en línea y recógelo en nuestra tienda de Comas. 
+                                ¡Fácil, rápido y seguro!
                             </p>
 
                             <div class="inicio-botones">
