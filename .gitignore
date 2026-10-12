@@ -1,0 +1,9 @@
+/build/
+/dist/
+/nbproject/private/
+/nbbuild/
+/nbdist/
+*.class
+*.log
+Thumbs.db
+.DS_Store
