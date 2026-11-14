@@ -118,14 +118,50 @@
                             <c:when test="${cat.nombre eq 'Eléctrico'}"><c:set var="icono" value="bi-lightning-charge"/></c:when>
                             <c:otherwise><c:set var="icono" value="bi-wrench-adjustable"/></c:otherwise>
                         </c:choose>
+
                         <div class="col-12 col-sm-6 col-lg-4">
-                            <a class="categoria-card" href="${ctx}/catalogo?categoria=${cat.idCategoria}">
-                                <div class="categoria-icono"><i class="bi ${icono}"></i></div>
-                                <h3><c:out value="${cat.nombre}"/></h3>
-                                <p><c:out value="${cat.descripcion}"/></p>
-                                <span class="ver">Ver productos &rarr;</span>
+                            <a class="categoria-card"
+                               href="${ctx}/catalogo?categoria=${cat.idCategoria}">
+
+                                <div class="categoria-imagen">
+                                    <c:choose>
+                                        <c:when test="${cat.nombre eq 'Baterías'}">
+                                            <c:set var="imagen" value="baterias.jpg"/>
+                                        </c:when>
+                                        <c:when test="${cat.nombre eq 'Eléctrico'}">
+                                            <c:set var="imagen" value="electrico.jpg"/>
+                                        </c:when>
+                                        <c:when test="${cat.nombre eq 'Filtros'}">
+                                            <c:set var="imagen" value="filtros.jpg"/>
+                                        </c:when>
+                                        <c:when test="${cat.nombre eq 'Frenos'}">
+                                            <c:set var="imagen" value="frenos.jpg"/>
+                                        </c:when>
+                                        <c:when test="${cat.nombre eq 'Lubricantes'}">
+                                            <c:set var="imagen" value="lubricantes.jpg"/>
+                                        </c:when>
+                                        <c:when test="${cat.nombre eq 'Motor'}">
+                                            <c:set var="imagen" value="motor.jpg"/>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <c:set var="imagen" value="default.jpg"/>
+                                        </c:otherwise>
+                                    </c:choose>
+                                    
+                                        <img src="${ctx}/img/categorias/${imagen}"
+                                             alt="${cat.nombre}"
+                                             loading="lazy">
+                                    
+                                </div>
+                                <div class="categoria-contenido">
+                                    <h3><c:out value="${cat.nombre}"/></h3>
+                                    <p><c:out value="${cat.descripcion}"/></p>
+                                    <span class="ver">Ver productos &rarr;</span>
+                                </div>
+
                             </a>
                         </div>
+
                     </c:forEach>
                 </div>
             </section>

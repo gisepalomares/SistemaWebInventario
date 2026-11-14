@@ -196,6 +196,7 @@ main {
     transition: border-color .2s ease, box-shadow .2s ease;
 }
 
+
 .producto-card:hover {
     border-color: #777;
     box-shadow: 0 3px 10px rgba(0, 0, 0, .08);
