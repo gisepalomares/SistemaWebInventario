@@ -162,7 +162,7 @@ main {
 
 /* ---------- Encabezado de página interna ---------- */
 .encabezado-pagina {
-    
+
     margin-bottom: 2rem;
     padding: 2.25rem 0;
     background-color: var(--es-fondo-alt);
@@ -230,6 +230,21 @@ main {
     color: var(--es-oscuro);
     font-size: 1.3rem;
     font-weight: 700;
+}
+.producto-card .producto-foto {
+    flex-shrink: 0;
+    height: 100%;
+    overflow: hidden;
+    background-color: var(--es-blanco);
+    border-bottom: 1px solid var(--es-borde);
+}
+
+.producto-card .producto-foto img {
+    display: block;
+    width: 50%;
+    height: 50%;
+    object-fit: contain;
+    padding: .75rem;
 }
 
 /* ---------- Pie de página ---------- */
@@ -490,3 +505,5 @@ main {
         margin: .75rem;
     }
 }
+
+

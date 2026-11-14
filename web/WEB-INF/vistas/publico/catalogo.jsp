@@ -69,7 +69,7 @@
                 <c:if test="${not empty flashError}">
                     <div class="alert alert-warning"><c:out value="${flashError}"/></div>
                 </c:if>
-                    
+
                 <c:if test="${empty error and empty productos}">
                     <div class="alert alert-secondary">No se encontraron productos con los criterios indicados.</div>
                 </c:if>
@@ -83,6 +83,14 @@
                     <c:forEach var="p" items="${productos}">
                         <div class="col">
                             <div class="card producto-card h-100">
+                                <%-- FOTO DEL PRODUCTO --%>
+                                <div class="ratio ratio-4x3 bg-white border-bottom">
+                                    <img src="${ctx}/img/productos/${p.codigoSku}.jpg"
+                                         alt="<c:out value='${p.nombre}'/>"
+                                         loading="lazy"
+                                         class="object-fit-contain p-3"
+                                         onerror="this.onerror=null; this.src='${ctx}/img/productos/sin-imagen.jpg';">
+                                </div>
                                 <div class="card-body">
                                     <span class="producto-categoria"><c:out value="${p.categoria}"/></span>
                                     <h5 class="card-title"><c:out value="${p.nombre}"/></h5>
@@ -106,7 +114,7 @@
                                             </c:otherwise>
                                         </c:choose>
                                     </div>
-                                                                        <c:choose>
+                                    <c:choose>
                                         <c:when test="${p.agotado}">
                                             <button type="button" class="btn btn-es-outline w-100" disabled>
                                                 <i class="bi bi-cart-plus"></i>Sin stock
