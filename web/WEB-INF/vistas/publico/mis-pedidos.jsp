@@ -51,6 +51,7 @@
 
                     <c:choose>
                         <c:when test="${ped.estado eq 'PENDIENTE_PAGO'}"><c:set var="claseEstado" value="text-bg-warning"/></c:when>
+                        <c:when test="${ped.estado eq 'PAGO_EN_REVISION'}"><c:set var="claseEstado" value="text-bg-info"/></c:when>
                         <c:when test="${ped.estado eq 'PAGADO'}"><c:set var="claseEstado" value="text-bg-primary"/></c:when>
                         <c:when test="${ped.estado eq 'LISTO_RECOGER'}"><c:set var="claseEstado" value="text-bg-success"/></c:when>
                         <c:when test="${ped.estado eq 'ENTREGADO'}"><c:set var="claseEstado" value="text-bg-secondary"/></c:when>
@@ -71,6 +72,10 @@
                             <c:if test="${ped.estado eq 'PENDIENTE_PAGO' and not empty ped.fechaVencimientoTexto}">
                                 · <strong>Pague en tienda antes del <c:out value="${ped.fechaVencimientoTexto}"/></strong>
                                 o el pedido se cancelará.
+                            </c:if>
+                            <c:if test="${ped.estado eq 'PAGO_EN_REVISION'}">
+                                · <strong>Estamos verificando su pago.</strong>
+                                Cuando se confirme, su pedido pasará a «Pagado» y lo prepararemos.
                             </c:if>
                             <c:if test="${ped.estado eq 'LISTO_RECOGER'}">
                                 · <strong>Ya puede recogerlo en tienda presentando su código.</strong>

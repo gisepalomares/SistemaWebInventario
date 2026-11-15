@@ -26,14 +26,15 @@ import util.PedidoException;
  * Bandeja de pedidos en línea para el personal (administrador y vendedor). URL:
  * /interno/pedidos?estado=PAGADO&q=texto
  *
- * Acciones (POST, campo "accion"): pagar | listo | entregar | cancelar El
+ * Acciones (POST, campo "accion"): pagar | confirmarpago | rechazarpago | listo | entregar | cancelar.
+ * confirmarpago / rechazarpago resuelven los pagos en línea (Yape/Plin) que están "en revisión". El
  * acceso del personal lo garantiza AutenticacionFiltro (/interno/*).
  */
 @WebServlet(name = "PedidosInternoServlet", urlPatterns = {"/interno/pedidos"})
 public class PedidosInternoServlet extends HttpServlet {
 
     private static final List<String> ESTADOS = Arrays.asList(
-            "PENDIENTE_PAGO", "PAGADO", "LISTO_RECOGER", "ENTREGADO", "VENCIDO", "CANCELADO");
+            "PENDIENTE_PAGO", "PAGO_EN_REVISION", "PAGADO", "LISTO_RECOGER", "ENTREGADO", "VENCIDO", "CANCELADO");
 
     private final PedidoFacade facade = new PedidoFacade();
 
@@ -118,6 +119,14 @@ public class PedidosInternoServlet extends HttpServlet {
                     sesion.setAttribute("flashOk", "Pago en "
                             + ("EFECTIVO".equals(request.getParameter("medio")) ? "efectivo" : "POS")
                             + " registrado. El pedido pasó a «Pagado».");
+                    break;
+                case "confirmarpago":
+                    facade.confirmarPagoQR(idPedido);
+                    sesion.setAttribute("flashOk", "Pago confirmado. El pedido pasó a «Pagado»: ya puede prepararlo.");
+                    break;
+                case "rechazarpago":
+                    facade.rechazarPagoQR(idPedido);
+                    sesion.setAttribute("flashOk", "Pago rechazado. El pedido se canceló y se liberó el stock reservado.");
                     break;
                 case "listo":
                     facade.marcarListo(idPedido);

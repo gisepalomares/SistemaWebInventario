@@ -4,6 +4,7 @@
  */
 package interfaces;
 
+import entidad.Comprobante;
 import entidad.Pedido;
 import java.sql.SQLException;
 import java.util.List;
@@ -23,6 +24,17 @@ public interface IPedidoDAO {
      * @throws PedidoException si algún producto ya no tiene stock suficiente (no se reserva nada)
      */
     void registrar(Pedido pedido) throws SQLException, PedidoException;
+
+    /**
+     * Igual que registrar(), para el pago con Yape/Plin: el pedido debe venir en estado
+     * PAGO_EN_REVISION y, en la misma transacción, se guarda un pago PENDIENTE con la captura.
+     *
+     * @param medio       "YAPE" o "PLIN"
+     * @param comprobante bytes de la imagen (ya validada)
+     * @param tipo        image/jpeg, image/png o image/webp
+     */
+    void registrarConComprobante(Pedido pedido, String medio, byte[] comprobante, String tipo)
+            throws SQLException, PedidoException;
 
     /** Pedidos de una cuenta de cliente (los más recientes primero), cada uno con sus detalles. */
     List<Pedido> listarPorUsuario(int idUsuario) throws SQLException;
@@ -49,6 +61,15 @@ public interface IPedidoDAO {
      */
     void registrarPagoEnTienda(int idPedido, String medio, String referencia) throws SQLException, PedidoException;
     
+    /** PAGO_EN_REVISION -> PAGADO. El vendedor comprobó que el dinero llegó a la cuenta. */
+    void confirmarPagoQR(int idPedido) throws SQLException, PedidoException;
+
+    /** PAGO_EN_REVISION -> CANCELADO. El pago no llegó: se rechaza y se libera el stock reservado. */
+    void rechazarPagoQR(int idPedido) throws SQLException, PedidoException;
+
+    /** Captura de un pago (null si no existe). Solo para el personal. */
+    Comprobante obtenerComprobante(int idPago) throws SQLException;
+
     /** PAGADO -> LISTO_RECOGER. */
     void marcarListo(int idPedido) throws SQLException, PedidoException;
 

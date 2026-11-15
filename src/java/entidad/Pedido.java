@@ -17,13 +17,18 @@ import java.util.List;
 public class Pedido implements Serializable {
 
     public static final String PENDIENTE_PAGO = "PENDIENTE_PAGO";
+    /** El cliente ya subió la captura de Yape/Plin; el vendedor debe verificar que el dinero llegó. */
+    public static final String PAGO_EN_REVISION = "PAGO_EN_REVISION";
     public static final String PAGADO = "PAGADO";
     public static final String LISTO_RECOGER = "LISTO_RECOGER";
     public static final String ENTREGADO = "ENTREGADO";
     public static final String VENCIDO = "VENCIDO";
     public static final String CANCELADO = "CANCELADO";
 
+    /** Pago en línea simulado: solo existe en pedidos antiguos, ya no se puede elegir. */
     public static final String METODO_EN_LINEA = "EN_LINEA_SIMULADO";
+    /** Pago en línea con Yape o Plin (el cliente sube la captura del pago). */
+    public static final String METODO_EN_LINEA_QR = "EN_LINEA_QR";
     public static final String METODO_EN_TIENDA = "EN_TIENDA";
 
     private int idPedido;
@@ -37,6 +42,8 @@ public class Pedido implements Serializable {
     private String clienteNombre;
     private String clienteDocumento;
     private String clienteTelefono;
+    private int idPagoComprobante;            // 0 si el pedido no tiene captura de pago
+    private String medioQR;                   // YAPE o PLIN (solo pedidos EN_LINEA_QR)
     private final List<DetallePedido> detalles = new ArrayList<>();
 
     public Pedido() {
@@ -49,6 +56,8 @@ public class Pedido implements Serializable {
         switch (estado) {
             case PENDIENTE_PAGO:
                 return "Pendiente de pago";
+            case PAGO_EN_REVISION:
+                return "Pago en revisión";
             case PAGADO:
                 return "Pagado";
             case LISTO_RECOGER:
@@ -68,10 +77,41 @@ public class Pedido implements Serializable {
         if (METODO_EN_LINEA.equals(metodoPago)) {
             return "Pago en línea (simulado)";
         }
+        if (METODO_EN_LINEA_QR.equals(metodoPago)) {
+            String medio = getMedioQRTexto();
+            return medio.isEmpty() ? "Pago en línea (Yape/Plin)" : "Pago en línea con " + medio;
+        }
         if (METODO_EN_TIENDA.equals(metodoPago)) {
             return "Pago en tienda";
         }
         return metodoPago;
+    }
+
+    /** "Yape", "Plin" o "" si no aplica. */
+    public String getMedioQRTexto() {
+        if ("YAPE".equals(medioQR)) {
+            return "Yape";
+        }
+        if ("PLIN".equals(medioQR)) {
+            return "Plin";
+        }
+        return "";
+    }
+
+    public int getIdPagoComprobante() {
+        return idPagoComprobante;
+    }
+
+    public void setIdPagoComprobante(int idPagoComprobante) {
+        this.idPagoComprobante = idPagoComprobante;
+    }
+
+    public String getMedioQR() {
+        return medioQR;
+    }
+
+    public void setMedioQR(String medioQR) {
+        this.medioQR = medioQR;
     }
 
     public int getIdPedido() {

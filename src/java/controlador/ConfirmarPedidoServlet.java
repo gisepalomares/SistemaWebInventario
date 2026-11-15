@@ -8,21 +8,31 @@ import entidad.Carrito;
 import entidad.Pedido;
 import entidad.Usuario;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 import servicio.PedidoFacade;
 import util.Csrf;
 import util.PedidoException;
 
 /**
  * POST /pedido/confirmar  -> confirma el pedido (reserva el stock) y redirige a la pantalla de éxito.
+ *      metodoPago=EN_TIENDA   -> pago en tienda (48 h para pagar).
+ *      metodoPago=EN_LINEA_QR -> pago con Yape/Plin: además del formulario viajan "medioQR" (YAPE|PLIN)
+ *                                y "comprobante" (la captura de pantalla). El pedido queda "en revisión"
+ *                                hasta que el vendedor verifique el pago en el panel interno.
  * GET  /pedido/confirmado -> muestra el código de recojo del pedido recién creado.
+ *
+ * El formulario del carrito es multipart (por la captura); límite: 5 MB por imagen.
  */
+@MultipartConfig(fileSizeThreshold = 1024 * 1024, maxFileSize = 5 * 1024 * 1024, maxRequestSize = 6 * 1024 * 1024)
 @WebServlet(name = "ConfirmarPedidoServlet", urlPatterns = {"/pedido/confirmar", "/pedido/confirmado"})
 public class ConfirmarPedidoServlet extends HttpServlet {
 
@@ -65,6 +75,18 @@ public class ConfirmarPedidoServlet extends HttpServlet {
         if (usuario == null) {
             return;
         }
+
+        // Se lee el multipart aquí para poder avisar con un mensaje claro si la imagen pasa el límite
+        // (si no, el cliente vería una página de error).
+        if (esMultipart(request)) {
+            try {
+                request.getParts();
+            } catch (IllegalStateException e) {
+                request.getSession().setAttribute("flashError", "La imagen es muy pesada. El máximo es 5 MB.");
+                response.sendRedirect(request.getContextPath() + "/carrito");
+                return;
+            }
+        }
         if (!Csrf.valido(request)) {
             response.sendError(HttpServletResponse.SC_FORBIDDEN,
                     "Solicitud no válida. Recargue la página e intente de nuevo.");
@@ -81,7 +103,8 @@ public class ConfirmarPedidoServlet extends HttpServlet {
         }
 
         String metodoPago = request.getParameter("metodoPago");
-        boolean simularRechazo = "RECHAZADO".equals(request.getParameter("resultadoSimulado"));
+        boolean pagoQR = Pedido.METODO_EN_LINEA_QR.equals(metodoPago);
+        byte[] captura = pagoQR ? leerCaptura(request) : null;   // se lee antes del bloqueo del carrito
 
         // synchronized: un doble clic no puede crear dos pedidos con el mismo carrito
         synchronized (carrito) {
@@ -90,7 +113,9 @@ public class ConfirmarPedidoServlet extends HttpServlet {
                 return;
             }
             try {
-                Pedido pedido = facade.confirmarPedido(usuario, carrito, metodoPago, simularRechazo);
+                Pedido pedido = pagoQR
+                        ? facade.confirmarPedidoQR(usuario, carrito, request.getParameter("medioQR"), captura)
+                        : facade.confirmarPedido(usuario, carrito, metodoPago);
                 carrito.vaciar();
                 sesion.setAttribute("pedidoConfirmado", pedido);
                 response.sendRedirect(ctx + "/pedido/confirmado");
@@ -102,6 +127,25 @@ public class ConfirmarPedidoServlet extends HttpServlet {
                 sesion.setAttribute("flashError", "No se pudo registrar su pedido. Intente nuevamente.");
                 response.sendRedirect(ctx + "/carrito");
             }
+        }
+    }
+
+    private boolean esMultipart(HttpServletRequest request) {
+        String tipo = request.getContentType();
+        return tipo != null && tipo.toLowerCase().startsWith("multipart/");
+    }
+
+    /** Bytes de la captura enviada (null si no se envió nada). El tamaño ya lo limita @MultipartConfig. */
+    private byte[] leerCaptura(HttpServletRequest request) throws IOException, ServletException {
+        if (!esMultipart(request)) {
+            return null;
+        }
+        Part parte = request.getPart("comprobante");
+        if (parte == null || parte.getSize() == 0) {
+            return null;
+        }
+        try (InputStream in = parte.getInputStream()) {
+            return in.readAllBytes();
         }
     }
 

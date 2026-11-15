@@ -4,6 +4,7 @@
  */
 package dao;
 
+import entidad.Comprobante;
 import entidad.DetallePedido;
 import entidad.Pedido;
 import interfaces.IPedidoDAO;
@@ -31,6 +32,21 @@ public class PedidoDAO implements IPedidoDAO {
 
     @Override
     public void registrar(Pedido pedido) throws SQLException, PedidoException {
+        registrarTodo(pedido, null, null, null);
+    }
+
+    @Override
+    public void registrarConComprobante(Pedido pedido, String medio, byte[] comprobante, String tipo)
+            throws SQLException, PedidoException {
+        registrarTodo(pedido, medio, comprobante, tipo);
+    }
+
+    /**
+     * Pedido + detalle + reserva de stock (+ pago) en UNA sola transacción: si algo falla
+     * no queda nada a medias (ni stock reservado ni captura guardada).
+     */
+    private void registrarTodo(Pedido pedido, String medioQR, byte[] comprobante, String tipoComprobante)
+            throws SQLException, PedidoException {
         try (Connection cn = ConexionBD.conectar()) {
             cn.setAutoCommit(false);
             try {
@@ -96,6 +112,18 @@ public class PedidoDAO implements IPedidoDAO {
                         ps.setInt(1, pedido.getIdPedido());
                         ps.setBigDecimal(2, total);
                         ps.setString(3, "SIM-" + pedido.getCodigoRecojo());
+                        ps.executeUpdate();
+                    }
+                } else if (Pedido.PAGO_EN_REVISION.equals(pedido.getEstado()) && comprobante != null) {
+                    // Pago Yape/Plin: queda PENDIENTE hasta que el vendedor verifique que el dinero llegó
+                    try (PreparedStatement ps = cn.prepareStatement(
+                            "INSERT INTO pago (id_pedido, monto, medio, estado, comprobante, comprobante_tipo) "
+                            + "VALUES (?, ?, ?, 'PENDIENTE', ?, ?)")) {
+                        ps.setInt(1, pedido.getIdPedido());
+                        ps.setBigDecimal(2, total);
+                        ps.setString(3, medioQR);
+                        ps.setBytes(4, comprobante);
+                        ps.setString(5, tipoComprobante);
                         ps.executeUpdate();
                     }
                 }
@@ -178,11 +206,15 @@ public class PedidoDAO implements IPedidoDAO {
                 + "DATE_FORMAT(p.fecha_pedido, '%d/%m/%Y %H:%i') AS fecha_pedido_txt, "
                 + "DATE_FORMAT(p.fecha_vencimiento, '%d/%m/%Y %H:%i') AS fecha_venc_txt, "
                 + "c.nombres AS cliente, c.documento, c.telefono, "
+                + "pg.id_pago AS id_comprobante, pg.medio AS medio_qr, "
                 + "d.id_producto, pr.nombre AS producto, d.cantidad, d.precio_unitario "
                 + "FROM pedido p "
                 + "JOIN cliente c ON c.id_cliente = p.id_cliente "
                 + "JOIN detalle_pedido d ON d.id_pedido = p.id_pedido "
                 + "JOIN producto pr ON pr.id_producto = d.id_producto "
+                // Última captura de pago del pedido (solo su id: la imagen se pide aparte al abrirla)
+                + "LEFT JOIN pago pg ON pg.id_pago = (SELECT MAX(x.id_pago) FROM pago x "
+                + "WHERE x.id_pedido = p.id_pedido AND x.comprobante IS NOT NULL) "
                 + "WHERE 1 = 1 ");
         List<Object> params = new ArrayList<>();
 
@@ -221,6 +253,8 @@ public class PedidoDAO implements IPedidoDAO {
                         p.setClienteNombre(rs.getString("cliente"));
                         p.setClienteDocumento(rs.getString("documento"));
                         p.setClienteTelefono(rs.getString("telefono"));
+                        p.setIdPagoComprobante(rs.getInt("id_comprobante"));   // 0 si no tiene
+                        p.setMedioQR(rs.getString("medio_qr"));
                         pedidos.put(idPedido, p);
                     }
                     DetallePedido d = new DetallePedido();
@@ -277,6 +311,68 @@ public class PedidoDAO implements IPedidoDAO {
             } catch (SQLException | PedidoException e) {
                 cn.rollback();
                 throw e;
+            }
+        }
+    }
+
+    @Override
+    public void confirmarPagoQR(int idPedido) throws SQLException, PedidoException {
+        try (Connection cn = ConexionBD.conectar()) {
+            cn.setAutoCommit(false);
+            try {
+                FilaPedido f = bloquearPedido(cn, idPedido);
+                exigirEstado(f, Pedido.PAGO_EN_REVISION, "confirmar el pago");
+                resolverPagoPendiente(cn, idPedido, "APROBADO");
+                cambiarEstado(cn, idPedido, Pedido.PAGADO);
+                cn.commit();
+            } catch (SQLException | PedidoException e) {
+                cn.rollback();
+                throw e;
+            }
+        }
+    }
+
+    @Override
+    public void rechazarPagoQR(int idPedido) throws SQLException, PedidoException {
+        try (Connection cn = ConexionBD.conectar()) {
+            cn.setAutoCommit(false);
+            try {
+                FilaPedido f = bloquearPedido(cn, idPedido);
+                exigirEstado(f, Pedido.PAGO_EN_REVISION, "rechazar el pago");
+                resolverPagoPendiente(cn, idPedido, "RECHAZADO");   // la captura se conserva como constancia
+                liberarReserva(cn, idPedido);
+                cambiarEstado(cn, idPedido, Pedido.CANCELADO);
+                cn.commit();
+            } catch (SQLException | PedidoException e) {
+                cn.rollback();
+                throw e;
+            }
+        }
+    }
+
+    @Override
+    public Comprobante obtenerComprobante(int idPago) throws SQLException {
+        try (Connection cn = ConexionBD.conectar(); PreparedStatement ps = cn.prepareStatement(
+                "SELECT comprobante, comprobante_tipo FROM pago WHERE id_pago = ? AND comprobante IS NOT NULL")) {
+            ps.setInt(1, idPago);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (!rs.next()) {
+                    return null;
+                }
+                return new Comprobante(rs.getBytes("comprobante"), rs.getString("comprobante_tipo"));
+            }
+        }
+    }
+
+    /** Marca el pago PENDIENTE del pedido como APROBADO o RECHAZADO. */
+    private void resolverPagoPendiente(Connection cn, int idPedido, String nuevoEstado)
+            throws SQLException, PedidoException {
+        try (PreparedStatement ps = cn.prepareStatement(
+                "UPDATE pago SET estado = ? WHERE id_pedido = ? AND estado = 'PENDIENTE'")) {
+            ps.setString(1, nuevoEstado);
+            ps.setInt(2, idPedido);
+            if (ps.executeUpdate() == 0) {
+                throw new PedidoException("Este pedido no tiene un pago pendiente de revisión.");
             }
         }
     }

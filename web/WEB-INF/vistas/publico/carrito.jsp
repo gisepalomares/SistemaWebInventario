@@ -9,6 +9,13 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <fmt:setLocale value="es_PE"/>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
+<%-- ===== Pago en línea con Yape / Plin: datos de la empresa (edítelos aquí) =====
+     Los códigos QR son las imágenes web/img/pago/yape-qr.png y web/img/pago/plin-qr.png
+     (reemplácelas por los QR reales de la empresa, con el mismo nombre).
+     Opcional: si completa el titular o los números, se muestran bajo el QR por si el cliente no puede escanear. --%>
+<c:set var="titularPago" value=""/>
+<c:set var="numeroYape" value=""/>
+<c:set var="numeroPlin" value=""/>
 <!DOCTYPE html>
 <html lang="es">
     <head>
@@ -122,7 +129,8 @@
                             </form>
                         </div>
 
-                        <form method="post" action="${ctx}/pedido/confirmar" class="panel-es">
+                        <form method="post" action="${ctx}/pedido/confirmar" enctype="multipart/form-data"
+                              id="formPedido" class="panel-es">
                             <input type="hidden" name="csrf" value="${csrf}">
                             <h2 class="h5 mb-3">Forma de pago</h2>
 
@@ -135,26 +143,24 @@
                             </div>
                             <div class="form-check mb-3">
                                 <input class="form-check-input" type="radio" name="metodoPago" id="pagoLinea"
-                                       value="EN_LINEA_SIMULADO">
+                                       value="EN_LINEA_QR">
                                 <label class="form-check-label" for="pagoLinea">
-                                    <strong>Pagar en línea</strong> (simulado).
+                                    <strong>Pagar en línea</strong> con Yape o Plin: escanee el QR y suba la captura de su pago.
                                 </label>
                             </div>
 
-                            <div class="mb-3">
-                                <label for="resultadoSimulado" class="form-label small text-muted">
-                                    Resultado del pago simulado (solo demostración; aplica al pago en línea)
-                                </label>
-                                <select name="resultadoSimulado" id="resultadoSimulado" class="form-select"
-                                        style="max-width: 260px;">
-                                    <option value="APROBADO">Aprobado</option>
-                                    <option value="RECHAZADO">Rechazado</option>
-                                </select>
+                            <%-- Se muestra cuando ya se adjuntó la captura del pago --%>
+                            <div id="resumenCaptura" class="d-none mb-3">
+                                <div class="alert alert-success d-flex flex-wrap align-items-center gap-2 py-2 mb-0 small">
+                                    <i class="bi bi-check-circle"></i>
+                                    <span>Captura lista: <strong id="nombreCaptura"></strong></span>
+                                    <button type="button" class="btn btn-link btn-sm p-0 ms-auto" id="btnCambiarCaptura">Cambiar captura</button>
+                                </div>
                             </div>
 
                             <p class="small text-muted">El retiro es únicamente en tienda, sin delivery.</p>
-                            <button type="submit" class="btn btn-es">
-                                <i class="bi bi-bag-check"></i>Confirmar pedido
+                            <button type="submit" class="btn btn-es" id="btnConfirmar">
+                                <i class="bi bi-bag-check"></i><span id="txtConfirmar">Confirmar pedido</span>
                             </button>
                         </form>
 
@@ -164,6 +170,234 @@
             </div>
         </main>
 
+        <c:if test="${not empty sessionScope.carrito and not sessionScope.carrito.vacio}">
+            <fmt:formatNumber var="montoPago" value="${sessionScope.carrito.total}" pattern="#,##0.00"/>
+
+            <%-- ===== Ventana 1: QR de Yape / Plin con el monto a pagar ===== --%>
+            <div class="modal fade" id="modalQR" tabindex="-1" aria-labelledby="tituloQR" aria-hidden="true"
+                 data-bs-backdrop="static">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 class="modal-title h5" id="tituloQR">Pague con Yape o Plin</h2>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        </div>
+                        <div class="modal-body text-center">
+                            <div class="btn-group mb-3" role="group" aria-label="Elija dónde pagar">
+                                <input type="radio" class="btn-check" name="medioQR" id="medioYape" value="YAPE"
+                                       form="formPedido" autocomplete="off" checked>
+                                <label class="btn btn-es-outline" for="medioYape">Yape</label>
+                                <input type="radio" class="btn-check" name="medioQR" id="medioPlin" value="PLIN"
+                                       form="formPedido" autocomplete="off">
+                                <label class="btn btn-es-outline" for="medioPlin">Plin</label>
+                            </div>
+
+                            <div id="qrYape">
+                                <img src="${ctx}/img/pago/yape-qr.png" alt="Código QR de Yape" class="qr-pago">
+                                <c:if test="${not empty numeroYape}">
+                                    <p class="small text-muted mt-2 mb-0">O yapee al número <strong><c:out value="${numeroYape}"/></strong></p>
+                                </c:if>
+                            </div>
+                            <div id="qrPlin" class="d-none">
+                                <img src="${ctx}/img/pago/plin-qr.png" alt="Código QR de Plin" class="qr-pago">
+                                <c:if test="${not empty numeroPlin}">
+                                    <p class="small text-muted mt-2 mb-0">O pague por Plin al número <strong><c:out value="${numeroPlin}"/></strong></p>
+                                </c:if>
+                            </div>
+
+                            <p class="text-muted small mt-3 mb-0">Monto a pagar</p>
+                            <p class="monto-qr mb-2">S/ ${montoPago}</p>
+                            <c:if test="${not empty titularPago}">
+                                <p class="small mb-2">Titular: <strong><c:out value="${titularPago}"/></strong></p>
+                            </c:if>
+                            <p class="small text-muted mb-0">
+                                Pague exactamente este monto y tome una captura de pantalla de la confirmación del pago.
+                            </p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-es-outline" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-es" id="btnProcesar">Procesar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <%-- ===== Ventana 2: subir la captura del pago ===== --%>
+            <div class="modal fade" id="modalComprobante" tabindex="-1" aria-labelledby="tituloComprobante"
+                 aria-hidden="true" data-bs-backdrop="static">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 class="modal-title h5" id="tituloComprobante">Suba la captura de su pago</h2>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="mb-3">
+                                Adjunte la captura de pantalla de su pago con <strong id="medioElegido">Yape</strong>
+                                por <strong>S/ ${montoPago}</strong>.
+                            </p>
+                            <label for="comprobante" class="form-label">Captura del pago</label>
+                            <input type="file" class="form-control" id="comprobante" name="comprobante"
+                                   form="formPedido" accept="image/jpeg,image/png,image/webp">
+                            <div class="form-text">Imagen JPG, PNG o WEBP de hasta 5 MB.</div>
+                            <div id="errorCaptura" class="text-danger small mt-2 d-none" role="alert"></div>
+                            <div class="text-center">
+                                <img id="vistaPrevia" class="img-fluid border mt-3 d-none vista-previa-captura"
+                                     alt="Vista previa de la captura">
+                            </div>
+                            <p class="small text-muted mt-3 mb-0">
+                                Un vendedor verificará que el pago llegó a la cuenta de la tienda y confirmará su pedido.
+                            </p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-es-outline" id="btnVolverQR">Volver al QR</button>
+                            <button type="submit" class="btn btn-es" id="btnEnviar" form="formPedido" disabled>
+                                Enviar comprobante
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </c:if>
+
         <jsp:include page="/WEB-INF/vistas/comunes/pie.jsp"/>
+        <c:if test="${not empty sessionScope.carrito and not sessionScope.carrito.vacio}">
+            <script>
+                // Pago en línea: al elegirlo se abre el QR; "Procesar" lo cierra y abre la subida de la captura.
+                (function () {
+                    var MAX_BYTES = 5 * 1024 * 1024;
+                    var TIPOS = ['image/jpeg', 'image/png', 'image/webp'];
+
+                    var form = document.getElementById('formPedido');
+                    var archivo = document.getElementById('comprobante');
+                    var btnConfirmar = document.getElementById('btnConfirmar');
+                    var txtConfirmar = document.getElementById('txtConfirmar');
+                    var resumen = document.getElementById('resumenCaptura');
+                    var nombreCaptura = document.getElementById('nombreCaptura');
+                    var elQR = document.getElementById('modalQR');
+                    var elComp = document.getElementById('modalComprobante');
+                    var modalQR = new bootstrap.Modal(elQR);
+                    var modalComp = new bootstrap.Modal(elComp);
+                    var btnEnviar = document.getElementById('btnEnviar');
+                    var error = document.getElementById('errorCaptura');
+                    var vista = document.getElementById('vistaPrevia');
+                    var siguiente = null;      // ventana que se abre cuando termina de cerrarse la actual
+                    var urlVista = null;
+
+                    function enLinea() {
+                        return form.querySelector('input[name="metodoPago"]:checked').value === 'EN_LINEA_QR';
+                    }
+                    function hayCaptura() {
+                        return archivo.files.length > 0;
+                    }
+                    function esYape() {
+                        return document.querySelector('input[name="medioQR"]:checked').value === 'YAPE';
+                    }
+
+                    function actualizarPantalla() {
+                        document.getElementById('qrYape').classList.toggle('d-none', !esYape());
+                        document.getElementById('qrPlin').classList.toggle('d-none', esYape());
+                        document.getElementById('medioElegido').textContent = esYape() ? 'Yape' : 'Plin';
+                        resumen.classList.toggle('d-none', !(enLinea() && hayCaptura()));
+                        txtConfirmar.textContent = !enLinea() ? 'Confirmar pedido'
+                                : (hayCaptura() ? 'Enviar pedido y comprobante' : 'Pagar con Yape o Plin');
+                    }
+
+                    // --- Elegir la forma de pago ---
+                    form.querySelectorAll('input[name="metodoPago"]').forEach(function (r) {
+                        r.addEventListener('change', function () {
+                            actualizarPantalla();
+                            if (enLinea() && !hayCaptura()) {
+                                modalQR.show();
+                            }
+                        });
+                    });
+                    document.querySelectorAll('input[name="medioQR"]').forEach(function (r) {
+                        r.addEventListener('change', actualizarPantalla);
+                    });
+
+                    // --- Pasar de la ventana del QR a la de la captura (y volver) ---
+                    document.getElementById('btnProcesar').addEventListener('click', function () {
+                        siguiente = 'comprobante';
+                        modalQR.hide();
+                    });
+                    document.getElementById('btnVolverQR').addEventListener('click', function () {
+                        siguiente = 'qr';
+                        modalComp.hide();
+                    });
+                    elQR.addEventListener('hidden.bs.modal', function () {
+                        if (siguiente === 'comprobante') {
+                            siguiente = null;
+                            modalComp.show();
+                        }
+                    });
+                    elComp.addEventListener('hidden.bs.modal', function () {
+                        if (siguiente === 'qr') {
+                            siguiente = null;
+                            modalQR.show();
+                        }
+                    });
+                    document.getElementById('btnCambiarCaptura').addEventListener('click', function () {
+                        modalComp.show();
+                    });
+
+                    // --- Validar la imagen elegida (el servidor vuelve a validarla) ---
+                    archivo.addEventListener('change', function () {
+                        error.classList.add('d-none');
+                        vista.classList.add('d-none');
+                        btnEnviar.disabled = true;
+                        if (urlVista) {
+                            URL.revokeObjectURL(urlVista);
+                            urlVista = null;
+                        }
+                        var f = archivo.files[0];
+                        if (f) {
+                            var mensaje = null;
+                            if (TIPOS.indexOf(f.type) === -1) {
+                                mensaje = 'Suba una imagen JPG, PNG o WEBP.';
+                            } else if (f.size > MAX_BYTES) {
+                                mensaje = 'La imagen pesa más de 5 MB. Suba una más liviana.';
+                            }
+                            if (mensaje) {
+                                archivo.value = '';
+                                error.textContent = mensaje;
+                                error.classList.remove('d-none');
+                            } else {
+                                urlVista = URL.createObjectURL(f);
+                                vista.src = urlVista;
+                                vista.classList.remove('d-none');
+                                nombreCaptura.textContent = f.name;
+                                btnEnviar.disabled = false;
+                            }
+                        }
+                        actualizarPantalla();
+                    });
+
+                    // --- Enviar ---
+                    form.addEventListener('submit', function (e) {
+                        if (enLinea()) {
+                            if (!hayCaptura()) {          // pagar en línea sin captura: se abre el QR
+                                e.preventDefault();
+                                modalQR.show();
+                                return;
+                            }
+                        } else {
+                            archivo.disabled = true;      // pagando en tienda no se envía ninguna imagen
+                        }
+                        btnConfirmar.disabled = true;     // evita doble clic
+                        btnEnviar.disabled = true;
+                    });
+                    // Si el cliente vuelve con "atrás", los botones quedan activos de nuevo
+                    window.addEventListener('pageshow', function () {
+                        archivo.disabled = false;
+                        btnConfirmar.disabled = false;
+                        btnEnviar.disabled = !hayCaptura();
+                        actualizarPantalla();
+                    });
+
+                    actualizarPantalla();
+                })();
+            </script>
+        </c:if>
     </body>
 </html>

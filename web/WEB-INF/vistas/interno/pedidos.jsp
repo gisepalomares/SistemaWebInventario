@@ -9,8 +9,8 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <fmt:setLocale value="es_PE"/>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
-<c:set var="estados" value="${fn:split('PENDIENTE_PAGO,PAGADO,LISTO_RECOGER,ENTREGADO,VENCIDO,CANCELADO', ',')}"/>
-<c:set var="etiquetas" value="${fn:split('Pendientes de pago,Por preparar,Listos para recoger,Entregados,Vencidos,Cancelados', ',')}"/>
+<c:set var="estados" value="${fn:split('PENDIENTE_PAGO,PAGO_EN_REVISION,PAGADO,LISTO_RECOGER,ENTREGADO,VENCIDO,CANCELADO', ',')}"/>
+<c:set var="etiquetas" value="${fn:split('Pendientes de pago,Por verificar pago,Por preparar,Listos para recoger,Entregados,Vencidos,Cancelados', ',')}"/>
 
 <%-- Campos que se repiten en todos los formularios (token + filtros actuales para volver a la misma vista) --%>
 <c:set var="camposComunes">
@@ -37,7 +37,7 @@
             <div class="encabezado-pagina">
                 <div class="container-fluid px-4">
                     <h1>Pedidos en línea</h1>
-                    <p>Registre el pago en tienda, prepare, entregue o cancele los pedidos de los clientes.</p>
+                    <p>Registre el pago en tienda, verifique los pagos Yape/Plin, prepare, entregue o cancele los pedidos de los clientes.</p>
                 </div>
             </div>
 
@@ -95,6 +95,7 @@
 
                     <c:choose>
                         <c:when test="${ped.estado eq 'PENDIENTE_PAGO'}"><c:set var="claseEstado" value="text-bg-warning"/></c:when>
+                        <c:when test="${ped.estado eq 'PAGO_EN_REVISION'}"><c:set var="claseEstado" value="text-bg-info"/></c:when>
                         <c:when test="${ped.estado eq 'PAGADO'}"><c:set var="claseEstado" value="text-bg-primary"/></c:when>
                         <c:when test="${ped.estado eq 'LISTO_RECOGER'}"><c:set var="claseEstado" value="text-bg-success"/></c:when>
                         <c:when test="${ped.estado eq 'ENTREGADO'}"><c:set var="claseEstado" value="text-bg-secondary"/></c:when>
@@ -121,6 +122,30 @@
                                 · <strong>Vence el <c:out value="${ped.fechaVencimientoTexto}"/></strong>
                             </c:if>
                         </p>
+
+                        <%-- ===== Captura del pago Yape/Plin enviada por el cliente ===== --%>
+                        <fmt:formatNumber var="totalTxt" value="${ped.total}" pattern="#,##0.00"/>
+                        <c:if test="${ped.idPagoComprobante gt 0}">
+                            <div class="d-flex flex-wrap gap-3 align-items-start mb-3">
+                                <a href="${ctx}/interno/comprobante?id=${ped.idPagoComprobante}" target="_blank"
+                                   rel="noopener" title="Abrir la captura en tamaño completo">
+                                    <img src="${ctx}/interno/comprobante?id=${ped.idPagoComprobante}"
+                                         alt="Captura del pago" class="comprobante-mini" loading="lazy">
+                                </a>
+                                <div class="small">
+                                    <p class="mb-1">
+                                        <i class="bi bi-image me-1"></i>Captura de pago enviada por el cliente
+                                        (<c:out value="${ped.medioQRTexto}"/>).
+                                    </p>
+                                    <c:if test="${ped.estado eq 'PAGO_EN_REVISION'}">
+                                        <p class="mb-0">
+                                            Verifique en la cuenta de la empresa que llegó
+                                            <strong>S/ ${totalTxt}</strong> y recién entonces confirme el pago.
+                                        </p>
+                                    </c:if>
+                                </div>
+                            </div>
+                        </c:if>
 
                         <div class="table-responsive mb-3">
                             <table class="table table-sm align-middle mb-0">
@@ -169,6 +194,27 @@
                                            placeholder="N.° de operación del voucher POS">
                                     <button type="submit" class="btn btn-es btn-sm">
                                         <i class="bi bi-cash-coin"></i>Registrar pago
+                                    </button>
+                                </form>
+                            </c:if>
+
+                            <c:if test="${ped.estado eq 'PAGO_EN_REVISION'}">
+                                <form method="post" action="${ctx}/interno/pedidos" class="m-0"
+                                      onsubmit="return confirm('¿Ya verificó que los S/ ${totalTxt} llegaron a la cuenta de la empresa?');">
+                                    ${camposComunes}
+                                    <input type="hidden" name="accion" value="confirmarpago">
+                                    <input type="hidden" name="idPedido" value="${ped.idPedido}">
+                                    <button type="submit" class="btn btn-es btn-sm">
+                                        <i class="bi bi-check2-circle"></i>Confirmar pago
+                                    </button>
+                                </form>
+                                <form method="post" action="${ctx}/interno/pedidos" class="m-0"
+                                      onsubmit="return confirm('¿Rechazar el pago? El pedido se cancelará y se liberará el stock reservado.');">
+                                    ${camposComunes}
+                                    <input type="hidden" name="accion" value="rechazarpago">
+                                    <input type="hidden" name="idPedido" value="${ped.idPedido}">
+                                    <button type="submit" class="btn btn-outline-danger btn-sm">
+                                        <i class="bi bi-x-circle"></i>Rechazar pago
                                     </button>
                                 </form>
                             </c:if>

@@ -49,9 +49,17 @@
                             Si no se registra el pago a tiempo, el pedido se cancelará y el stock se liberará automáticamente.
                         </div>
                     </c:when>
+                    <c:when test="${p.estado eq 'PAGO_EN_REVISION'}">
+                        <div class="alert alert-info">
+                            <strong>Recibimos la captura de su pago.</strong>
+                            Un vendedor verificará que el dinero llegó a la cuenta de la tienda y confirmará su pedido.
+                            Su stock queda reservado mientras tanto. Puede ver el estado en
+                            <a href="${ctx}/mis-pedidos">Mis pedidos</a>.
+                        </div>
+                    </c:when>
                     <c:otherwise>
                         <div class="alert alert-success">
-                            Pago en línea aprobado (simulado). Ya puede recoger su pedido cuando esté listo.
+                            Pago en línea aprobado. Ya puede recoger su pedido cuando esté listo.
                         </div>
                     </c:otherwise>
                 </c:choose>
