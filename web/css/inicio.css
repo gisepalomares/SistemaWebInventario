@@ -4,114 +4,417 @@
    ===================================================================== */
 
 /* ---------- Portada ---------- */
+
+/* ==========================================
+   CARRUSEL PRINCIPAL - PORTADA
+   JD&A ELECTRO SPEED
+   ========================================== */
+
 .inicio-hero {
-    padding: 4.5rem 0;
-    background-color: var(--es-fondo-alt);
+    padding: 0;
     border-bottom: 1px solid var(--es-borde);
 }
 
-.inicio-titulo {
-    max-width: 640px;
-    margin-bottom: 1.25rem;
-    color: var(--es-oscuro);
-    font-size: clamp(2rem, 4vw, 3rem);
-    font-weight: 700;
-    line-height: 1.15;
+.carrusel-inicio {
+    position: relative;
+    width: 100%;
+    min-height: 570px;
+    overflow: hidden;
+    background: #212529;
 }
+/* ==========================================
+   BOTONES DE LA PORTADA
+   ========================================== */
 
-.inicio-titulo span {
-    display: block;
-    color: var(--es-texto-suave);
-}
-
-.inicio-descripcion {
-    max-width: 540px;
-    margin-bottom: 1.75rem;
-    color: #555;
-    font-size: 1.05rem;
-    line-height: 1.75;
-}
-
-.inicio-botones {
-    display: flex;
-    flex-wrap: wrap;
-    gap: .75rem;
-}
-
-.inicio-nota {
-    display: flex;
-    align-items: center;
-    gap: .45rem;
-    margin: 1.1rem 0 0;
-    color: var(--es-texto-suave);
-    font-size: .82rem;
-}
-
-/* Panel derecho de la portada */
-.hero-panel {
-    padding: 2rem;
-    background-color: var(--es-blanco);
-    border: 1px solid var(--es-borde);
-}
-
-.hero-panel h2 {
-    margin-bottom: 1rem;
-    color: var(--es-oscuro);
-    font-size: 1.3rem;
-    font-weight: 700;
-}
-
-.visual-linea {
-    width: 56px;
-    height: 3px;
-    margin-bottom: 1.5rem;
-    background-color: var(--es-oscuro-suave);
-}
-
-.hero-lista {
-    display: flex;
-    flex-direction: column;
-    gap: 1.15rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-}
-
-.hero-lista li {
-    display: flex;
-    align-items: flex-start;
-    gap: .9rem;
-}
-
-.hero-lista i {
-    display: flex;
-    flex-shrink: 0;
+.inicio-hero .inicio-botones .btn {
+    display: inline-flex;
     justify-content: center;
     align-items: center;
-    width: 40px;
-    height: 40px;
-    background-color: var(--es-fondo-alt);
-    border: 1px solid var(--es-borde);
-    color: var(--es-oscuro-suave);
-    font-size: 1.15rem;
+    padding: .75rem 1.5rem;
+    font-weight: 600;
+    text-decoration: none;
+    border: 1px solid #343a40;
+    background-color: #343a40;
+    color: #fff;
+    transition: all .25s ease;
 }
 
-.hero-lista strong {
-    display: block;
+/* Efecto al pasar el cursor */
+.inicio-hero .inicio-botones .btn:hover {
+    background-color: #212529;
+    border-color: #212529;
+    color: #fff;
+}
+
+/* DIAPOSITIVAS */
+
+.hero-slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height: 100%;
+    padding: 4rem 0 5rem;
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    transition: opacity .8s ease, visibility .8s ease;
+}
+
+.hero-slide.activo {
+    position: absolute;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    z-index: 1;
+}
+
+/* FONDOS DE LAS DIAPOSITIVAS */
+
+.hero-slide-principal {
+    background-image:
+        linear-gradient(
+        90deg,
+        rgba(15, 20, 25, .70) 0%,
+        rgba(15, 20, 25, .65) 45%,
+        rgba(15, 20, 25, .35) 100%
+        ),
+        url("../img/portada/portada-principal.jpg");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.hero-slide-pedidos {
+    background-image:
+        linear-gradient(
+        90deg,
+        rgba(15, 20, 25, .85) 0%,
+        rgba(15, 20, 25, .65) 55%,
+        rgba(15, 20, 25, .35) 100%
+        ),
+        url("../img/portada/portada-pedidos.jpg");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* CONTENIDO */
+
+.hero-slide .container {
+    position: relative;
+    z-index: 2;
+}
+
+.hero-slide .row {
+    width: 100%;
+}
+
+.hero-texto {
+    max-width: 650px;
+}
+
+.hero-slide .etiqueta {
+    color: #f0c36d;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+.hero-slide .inicio-titulo {
+    color: #fff;
+    margin-bottom: 1.25rem;
+}
+
+.hero-slide .inicio-titulo span {
+    color: #e6e6e6;
+}
+
+.hero-slide .inicio-descripcion {
+    color: #f0f0f0;
+}
+
+.hero-slide .inicio-nota {
+    color: #eeeeee;
+}
+
+/* ESPACIO LIBRE EN LA PRIMERA DIAPOSITIVA */
+
+.hero-espacio-vacio {
+    width: 100%;
+    min-height: 300px;
+}
+
+/* PANEL DE PEDIDOS */
+
+.hero-slide .hero-panel {
+    padding: 2rem;
+    background: rgba(255, 255, 255, .96);
+    border: 1px solid rgba(255, 255, 255, .5);
+    border-radius: 8px;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, .22);
+}
+
+.hero-slide .hero-panel h2 {
     color: var(--es-oscuro);
-    font-size: .92rem;
 }
 
-.hero-lista span {
-    color: var(--es-texto-suave);
-    font-size: .82rem;
-    line-height: 1.5;
+/* FLECHAS */
+
+.hero-flecha {
+    position: absolute;
+    top: 50%;
+    z-index: 5;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 44px;
+    height: 44px;
+
+    transform: translateY(-50%);
+
+    border: 1px solid rgba(255, 255, 255, .6);
+    border-radius: 50%;
+
+    background: rgba(0, 0, 0, .35);
+    color: #fff;
+
+    font-size: 1.2rem;
+    cursor: pointer;
+
+    transition: background .25s ease, transform .25s ease;
 }
 
+.hero-flecha:hover {
+    background: var(--es-oscuro-suave);
+}
+
+.hero-anterior {
+    left: 20px;
+}
+
+.hero-siguiente {
+    right: 20px;
+}
+
+/* INDICADORES */
+
+.hero-indicadores {
+    position: absolute;
+    bottom: 22px;
+    left: 50%;
+    z-index: 5;
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    transform: translateX(-50%);
+}
+
+.hero-punto {
+    width: 11px;
+    height: 11px;
+    padding: 0;
+
+    border: 1px solid #fff;
+    border-radius: 50%;
+
+    background: transparent;
+    cursor: pointer;
+
+    transition: all .3s ease;
+}
+
+.hero-punto.activo {
+    width: 28px;
+    border-radius: 10px;
+    background: #fff;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 991px) {
+
+    .carrusel-inicio {
+        min-height: 680px;
+    }
+
+    .hero-slide {
+        padding: 3.5rem 0 5rem;
+    }
+
+    .hero-slide-pedidos .hero-panel {
+        margin-top: 2rem;
+    }
+
+    .hero-espacio-vacio {
+        display: none;
+    }
+
+}
+
+@media (max-width: 575px) {
+
+    .carrusel-inicio {
+        min-height: 720px;
+    }
+
+    .hero-slide {
+        padding: 2.5rem 0 5rem;
+    }
+
+    .hero-slide .inicio-titulo {
+        font-size: 2rem;
+    }
+
+    .hero-slide .inicio-descripcion {
+        font-size: .95rem;
+    }
+
+    .hero-slide .hero-panel {
+        padding: 1.3rem;
+    }
+
+    .hero-flecha {
+        top: auto;
+        bottom: 12px;
+        width: 36px;
+        height: 36px;
+        transform: none;
+    }
+
+    .hero-anterior {
+        left: 20px;
+    }
+
+    .hero-siguiente {
+        right: 20px;
+    }
+
+    .hero-indicadores {
+        bottom: 25px;
+    }
+
+}
+
+
+/* ---------- SECCIÓN DE MARCAS ---------- */
+
+.seccion-marcas {
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
+/* Barra principal */
+
+.barra-anuncio {
+    width: 100%;
+    background: var(--es-oscuro-suave);
+    padding: 22px 0 22px;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+/* Título */
+
+.titulo-marcas {
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+/* Contenedor de los logos */
+
+.contenedor-marcas {
+    width: 100%;
+    overflow: hidden;
+    background: #f1f2f4;
+    padding: 10px 0;
+
+    -webkit-mask-image: linear-gradient(
+        to right,
+        transparent 0%,
+        black 3%,
+        black 97%,
+        transparent 100%
+        );
+
+    mask-image: linear-gradient(
+        to right,
+        transparent 0%,
+        black 3%,
+        black 97%,
+        transparent 100%
+        );
+
+}
+
+/* Animación */
+
+.ticker-marcas {
+    display: flex;
+    align-items: center;
+    width: max-content;
+    animation: mover-marcas 35s linear infinite;
+}
+
+.ticker-marcas img {
+    width: 120px;
+    height: 50px;
+    object-fit: contain;
+    flex-shrink: 0;
+    margin: 0 35px;
+}
+
+/* Movimiento */
+
+@keyframes mover-marcas {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+/* Pausar animación */
+
+.barra-anuncio:hover .ticker-marcas {
+    animation-play-state: paused;
+}
+
+/* Responsive */
+
+@media (max-width: 768px) {
+
+    .titulo-marcas {
+        font-size: 12px;
+        letter-spacing: 1px;
+    }
+
+    .ticker-marcas img {
+        width: 90px;
+        height: 40px;
+        margin: 0 25px;
+    }
+
+}
 /* ---------- Categorías ---------- */
 .seccion-categorias {
-    padding-top: 3.5rem;
-    padding-bottom: 3.5rem;
+    padding-top: 1rem;
+    padding-bottom: 3rem;
 }
 
 .encabezado-seccion {
@@ -243,25 +546,20 @@
 }
 
 /* ---------- Celulares y tablets ---------- */
-@media (max-width: 991px) {
-    .inicio-hero {
-        padding: 3rem 0;
-    }
-}
 
 @media (max-width: 575px) {
-    .inicio-hero {
-        padding: 2.25rem 0;
-    }
 
-    .inicio-botones .btn {
+    /* Botones del carrusel */
+    .hero-slide .inicio-botones .btn {
         width: 100%;
     }
 
-    .hero-panel {
-        padding: 1.4rem;
+    /* Panel de información de pedidos */
+    .hero-slide .hero-panel {
+        padding: 1.3rem;
     }
 
+    /* Encabezados de las secciones */
     .encabezado-seccion {
         flex-direction: column;
         align-items: flex-start;
@@ -287,42 +585,31 @@
 
 /* ESPACIO FIJO PARA CADA IMAGEN */
 .seccion-categorias .categoria-card .categoria-imagen {
-    position: relative !important;
-    display: block !important;
-    width: 100% !important;
-    height: 110px !important;
-    min-height: 190px !important;
-    max-height: 190px !important;
-    flex: 0 0 190px !important;
-    overflow: hidden !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    box-sizing: border-box !important;
-}
-
-/* Todas las imágenes de categorías completas y uniformes */
-.seccion-categorias .categoria-card .categoria-imagen {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
     height: 190px;
     min-height: 190px;
     max-height: 190px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    flex: 0 0 190px;
     overflow: hidden;
     background-color: #fff;
     padding: 10px;
+    margin: 0;
     box-sizing: border-box;
 }
 
+/* IMÁGENES */
 .seccion-categorias .categoria-card .categoria-imagen img {
-    position: static !important;
+    position: static;
     display: block;
     width: 100%;
     height: 100%;
     max-width: 100%;
     max-height: 100%;
-    object-fit: contain !important;
+    object-fit: contain;
     object-position: center;
     padding: 0;
     margin: 0;
@@ -340,8 +627,8 @@
 /* Animación de las tarjetas de categorías */
 .seccion-categorias .categoria-card {
     transition: transform 0.3s ease,
-                box-shadow 0.3s ease,
-                border-color 0.3s ease;
+        box-shadow 0.3s ease,
+        border-color 0.3s ease;
     transform: translateY(0) scale(1);
 }
 

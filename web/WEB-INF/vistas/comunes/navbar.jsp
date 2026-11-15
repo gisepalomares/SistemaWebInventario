@@ -11,7 +11,9 @@
     <div class="container">
 
         <a class="navbar-brand" href="${ctx}/inicio">
-            <i class="bi bi-gear-fill"></i>JD&amp;A Electro Speed
+            <img src="${ctx}/img/portada/logo-2.png"
+                 alt="JD&A Electro Speed"
+                 class="logo-navbar">
         </a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -30,9 +32,9 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link ${param.activa eq 'carrito' ? 'active' : ''}" href="${ctx}/carrito">Carrito<c:if test="${not empty sessionScope.carrito and sessionScope.carrito.cantidadTotal > 0}"><span class="badge rounded-pill text-bg-warning ms-1">${sessionScope.carrito.cantidadTotal}</span></c:if></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link ${param.activa eq 'pedidos' ? 'active' : ''}" href="${ctx}/mis-pedidos">Mis pedidos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link ${param.activa eq 'pedidos' ? 'active' : ''}" href="${ctx}/mis-pedidos">Mis pedidos</a>
                 </li>
             </ul>
 

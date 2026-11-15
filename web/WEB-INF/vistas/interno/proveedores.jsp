@@ -148,7 +148,7 @@
                               data-bs-toggle="modal"
                               data-bs-target="#modalEliminar"
                               data-form-id="form-eliminar-${p.idProveedor}"
-                              data-proveedor="${p.razonSocial}">
+                              data-proveedor="<c:out value='${p.razonSocial}'/>"
                           <i class="bi bi-trash"></i>
                           Eliminar
                       </button>

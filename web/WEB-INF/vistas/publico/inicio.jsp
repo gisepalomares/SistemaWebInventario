@@ -18,76 +18,238 @@
 
         <main>
 
-            <%-- PORTADA --%>
+            <%-- PORTADA: CARRUSEL PRINCIPAL --%>
             <section class="inicio-hero">
-                <div class="container">
-                    <div class="row align-items-center g-4 g-lg-5">
 
-                        <div class="col-12 col-lg-7">
-                            <p class="etiqueta">Repuestos vehiculares</p>
+                <div id="carruselInicio" class="carrusel-inicio">
 
-                            <h1 class="inicio-titulo">
-                                ¡Tu vehículo en buenas manos,
-                                <span>tus repuestos al alcance!</span>
-                            </h1>
+                    <%-- DIAPOSITIVA 1: PRESENTACIÓN --%>
+                    <div class="hero-slide activo hero-slide-principal">
 
-                            <p class="inicio-descripcion">
-                                Encuentra lo que necesitas, realiza tu pedido 
-                                en línea y recógelo en nuestra tienda de Comas. 
-                                ¡Fácil, rápido y seguro!
-                            </p>
+                        <div class="container">
+                            <div class="row align-items-center">
 
-                            <div class="inicio-botones">
-                                <a class="btn btn-es" href="${ctx}/catalogo">
-                                    <i class="bi bi-grid"></i>Ver catálogo
-                                </a>
-                                <a class="btn btn-es-outline" href="${ctx}/registro">
-                                    <i class="bi bi-person-plus"></i>Crear cuenta
-                                </a>
-                            </div>
+                                <div class="col-12 col-lg-7">
 
-                            <p class="inicio-nota">
-                                <i class="bi bi-info-circle"></i>
-                                Los pedidos se retiran únicamente en tienda.
-                            </p>
-                        </div>
+                                    <div class="hero-texto">
 
-                        <div class="col-12 col-lg-5">
-                            <div class="hero-panel">
-                                <p class="etiqueta">Pedidos en línea</p>
-                                <h2>Compre en línea y retire en tienda</h2>
-                                <div class="visual-linea"></div>
+                                        <p class="etiqueta">Repuestos vehiculares</p>
 
-                                <ul class="hero-lista">
-                                    <li>
-                                        <i class="bi bi-box-seam"></i>
-                                        <div>
-                                            <strong>Disponibilidad actualizada</strong>
-                                            <span>El catálogo muestra el stock real de cada producto.</span>
+                                        <h1 class="inicio-titulo">
+                                            ¡Tu vehículo en buenas manos,
+                                            <span>tus repuestos al alcance!</span>
+                                        </h1>
+
+                                        <p class="inicio-descripcion">
+                                            Encuentra lo que necesitas, realiza tu pedido
+                                            en línea y recógelo en nuestra tienda de Comas.
+                                            ¡Fácil, rápido y seguro!
+                                        </p>
+
+                                        <div class="inicio-botones">
+
+                                            <a class="btn btn-es" href="${ctx}/catalogo">
+                                                <i class="bi bi-grid"></i>
+                                                Ver catálogo
+                                            </a>
+
+                                            <a class="btn btn-es-outline" href="${ctx}/registro">
+                                                <i class="bi bi-person-plus"></i>
+                                                Crear cuenta
+                                            </a>
+
                                         </div>
-                                    </li>
-                                    <li>
-                                        <i class="bi bi-clock-history"></i>
-                                        <div>
-                                            <strong>Reserva de hasta 48 horas</strong>
-                                            <span>Reserve su pedido y realice el pago en tienda.</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <i class="bi bi-upc-scan"></i>
-                                        <div>
-                                            <strong>Retiro con código</strong>
-                                            <span>Presente su código de recojo para retirar su pedido.</span>
-                                        </div>
-                                    </li>
-                                </ul>
+
+                                        <p class="inicio-nota">
+                                            <i class="bi bi-info-circle"></i>
+                                            Los pedidos se retiran únicamente en tienda.
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                                <%-- LADO DERECHO LIBRE PARA MOSTRAR LA IMAGEN --%>
+                                <div class="col-lg-5 d-none d-lg-block">
+                                    <div class="hero-espacio-vacio"></div>
+                                </div>
+
                             </div>
                         </div>
 
                     </div>
+
+
+                    <%-- DIAPOSITIVA 2: PEDIDOS EN LÍNEA --%>
+                    <div class="hero-slide hero-slide-pedidos">
+
+                        <div class="container">
+                            <div class="row align-items-center">
+
+                                <div class="col-12 col-lg-6">
+
+                                    <div class="hero-texto">
+
+                                        <p class="etiqueta">Compras fáciles y seguras</p>
+
+                                        <h2 class="inicio-titulo">
+                                            ¡Realiza tu pedido en línea
+                                            <span>y recógelo en nuestra tienda!</span>
+                                        </h2>
+
+                                        <p class="inicio-descripcion">
+                                            Consulta nuestro catálogo, reserva tus
+                                            productos y realiza el seguimiento de tu pedido
+                                            desde nuestra plataforma.
+                                        </p>
+
+                                        <div class="inicio-botones">
+
+                                            <a class="btn btn-es" href="${ctx}/catalogo">
+                                                <i class="bi bi-cart"></i>
+                                                Comprar ahora
+                                            </a>
+
+                                            <a class="btn btn-es-outline" href="${ctx}/registro">
+                                                <i class="bi bi-person-plus"></i>
+                                                Crear cuenta
+                                            </a>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="col-12 col-lg-5 offset-lg-1">
+
+                                    <div class="hero-panel">
+
+                                        <p class="etiqueta">Pedidos en línea</p>
+
+                                        <h2>Compre en línea y retire en tienda</h2>
+
+                                        <div class="visual-linea"></div>
+
+                                        <ul class="hero-lista">
+
+                                            <li>
+                                                <i class="bi bi-box-seam"></i>
+                                                <div>
+                                                    <strong>Disponibilidad actualizada</strong>
+                                                    <span>
+                                                        El catálogo muestra el stock real
+                                                        de cada producto.
+                                                    </span>
+                                                </div>
+                                            </li>
+
+                                            <li>
+                                                <i class="bi bi-clock-history"></i>
+                                                <div>
+                                                    <strong>Reserva de hasta 48 horas</strong>
+                                                    <span>
+                                                        Reserve su pedido y realice el pago
+                                                        en tienda.
+                                                    </span>
+                                                </div>
+                                            </li>
+
+                                            <li>
+                                                <i class="bi bi-upc-scan"></i>
+                                                <div>
+                                                    <strong>Retiro con código</strong>
+                                                    <span>
+                                                        Presente su código de recojo para
+                                                        retirar su pedido.
+                                                    </span>
+                                                </div>
+                                            </li>
+
+                                        </ul>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <%-- CONTROLES DEL CARRUSEL --%>
+                    <button class="hero-flecha hero-anterior"
+                            type="button"
+                            aria-label="Diapositiva anterior">
+                        <i class="bi bi-chevron-left"></i>
+                    </button>
+
+                    <button class="hero-flecha hero-siguiente"
+                            type="button"
+                            aria-label="Diapositiva siguiente">
+                        <i class="bi bi-chevron-right"></i>
+                    </button>
+
+                    <%-- INDICADORES --%>
+                    <div class="hero-indicadores">
+
+                        <button class="hero-punto activo"
+                                type="button"
+                                data-slide="0"
+                                aria-label="Ir a la primera diapositiva">
+                        </button>
+
+                        <button class="hero-punto"
+                                type="button"
+                                data-slide="1"
+                                aria-label="Ir a la segunda diapositiva">
+                        </button>
+
+                    </div>
+
                 </div>
+
             </section>
 
+
+
+            <%-- Barra de marcas --%>                         
+            <section class="seccion-marcas container">
+                <div class="barra-anuncio">
+                    <div class="contenido-marcas">
+                        <div class="titulo-marcas">
+                            TRABAJAMOS CON LAS MEJORES MARCAS
+                        </div>
+                        <div class="contenedor-marcas">
+                            <div class="ticker-marcas">
+                                <img src="${ctx}/img/marcas/toyota.png" alt="Toyota">
+                                <img src="${ctx}/img/marcas/vistony.png" alt="Vistony">
+                                <img src="${ctx}/img/marcas/hyundai.png" alt="hyundai">
+                                <img src="${ctx}/img/marcas/nissan.png" alt="nissan">
+                                <img src="${ctx}/img/marcas/mobilsuper.png" alt="mobil super">
+                                <img src="${ctx}/img/marcas/bosch.png" alt="bosch">
+                                <img src="${ctx}/img/marcas/volkswagen.png" alt="volkswagen">
+                                <img src="${ctx}/img/marcas/Suzuki.png" alt="Suzuki">
+                                <img src="${ctx}/img/marcas/shell-helix.png" alt="shell-helix">
+                                <img src="${ctx}/img/marcas/castrol.png" alt="castrol">
+
+                                <!-- Repetimos los logos para conseguir el efecto infinito -->
+                                <img src="${ctx}/img/marcas/toyota.png" alt="Toyota">
+                                <img src="${ctx}/img/marcas/vistony.png" alt="Vistony">
+                                <img src="${ctx}/img/marcas/hyundai.png" alt="hyundai">
+                                <img src="${ctx}/img/marcas/nissan.png" alt="nissan">
+                                <img src="${ctx}/img/marcas/mobilsuper.png" alt="mobil super">
+                                <img src="${ctx}/img/marcas/bosch.png" alt="bosch">
+                                <img src="${ctx}/img/marcas/volkswagen.png" alt="volkswagen">
+                                <img src="${ctx}/img/marcas/Suzuki.png" alt="Suzuki">
+                                <img src="${ctx}/img/marcas/shell-helix.png" alt="shell-helix">
+                                <img src="${ctx}/img/marcas/castrol.png" alt="castrol">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
             <%-- CATEGORÍAS (cargadas desde la base de datos) --%>
             <section class="seccion-categorias container">
 
@@ -147,11 +309,11 @@
                                             <c:set var="imagen" value="default.jpg"/>
                                         </c:otherwise>
                                     </c:choose>
-                                    
-                                        <img src="${ctx}/img/categorias/${imagen}"
-                                             alt="${cat.nombre}"
-                                             loading="lazy">
-                                    
+
+                                    <img src="${ctx}/img/categorias/${imagen}"
+                                         alt="<c:out value='${cat.nombre}'/>"
+                                         loading="lazy">
+
                                 </div>
                                 <div class="categoria-contenido">
                                     <h3><c:out value="${cat.nombre}"/></h3>
@@ -212,5 +374,69 @@
         </main>
 
         <jsp:include page="/WEB-INF/vistas/comunes/pie.jsp"/>
+
+        <%-- CARRUSEL DE LA PORTADA--%>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const carrusel = document.getElementById("carruselInicio");
+                if (!carrusel)
+                    return;
+                const diapositivas = carrusel.querySelectorAll(".hero-slide");
+                const puntos = carrusel.querySelectorAll(".hero-punto");
+                const anterior = carrusel.querySelector(".hero-anterior");
+                const siguiente = carrusel.querySelector(".hero-siguiente");
+                let indiceActual = 0;
+                let intervalo;
+                const tiempoCambio = 6000;
+                function mostrarDiapositiva(indice) {
+                    diapositivas[indiceActual].classList.remove("activo");
+                    puntos[indiceActual].classList.remove("activo");
+                    indiceActual = (indice + diapositivas.length) % diapositivas.length;
+                    diapositivas[indiceActual].classList.add("activo");
+                    puntos[indiceActual].classList.add("activo");
+                }
+                function reiniciarAutomatico() {
+
+                    clearInterval(intervalo);
+
+                    intervalo = setInterval(function () {
+                        mostrarDiapositiva(indiceActual + 1);
+                    }, tiempoCambio);
+
+                }
+                anterior.addEventListener("click", function () {
+
+                    mostrarDiapositiva(indiceActual - 1);
+                    reiniciarAutomatico();
+                });
+
+                siguiente.addEventListener("click", function () {
+
+                    mostrarDiapositiva(indiceActual + 1);
+                    reiniciarAutomatico();
+
+                });
+
+                puntos.forEach(function (punto) {
+                    punto.addEventListener("click", function () {
+                        const indice = Number(this.dataset.slide);
+                        mostrarDiapositiva(indice);
+                        reiniciarAutomatico();
+
+                    });
+
+                });
+
+                // Pausar cuando el usuario coloca el cursor sobre el carrusel
+                carrusel.addEventListener("mouseenter", function () {
+                    clearInterval(intervalo);
+                });
+                carrusel.addEventListener("mouseleave", function () {
+                    reiniciarAutomatico();
+                });
+                // Iniciar carrusel automático
+                reiniciarAutomatico();
+            });
+        </script>
     </body>
 </html>
