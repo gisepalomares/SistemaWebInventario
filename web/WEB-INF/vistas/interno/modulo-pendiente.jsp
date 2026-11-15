@@ -19,16 +19,17 @@
             <div class="encabezado-pagina">
                 <div class="container-fluid px-4">
                     <h1><c:out value="${moduloNombre}"/></h1>
-                    <p>Este módulo todavía no está desarrollado.</p>
+                    <p>Esta sección estará disponible próximamente.</p>
                 </div>
             </div>
 
             <div class="container-fluid px-4 pb-5">
                 <div class="panel-es text-center py-5">
                     <i class="bi ${moduloIcono}" style="font-size:2.5rem;color:#6c757d"></i>
-                    <h2 class="h5 mt-3">Módulo en construcción</h2>
+                    <h2 class="h5 mt-3">Próximamente</h2>
                     <p class="text-secondary mb-4">
-                        Aquí irá la pantalla de <strong><c:out value="${moduloNombre}"/></strong>.
+                        El módulo de <strong><c:out value="${moduloNombre}"/></strong> aún no está habilitado.<br>
+                        Mientras tanto, puede seguir trabajando con los demás módulos del panel.
                     </p>
                     <a class="btn btn-es-outline" href="${ctx}/interno/dashboard">
                         <i class="bi bi-arrow-left"></i>Volver al panel
